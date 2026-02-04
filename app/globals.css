@@ -1,26 +1,286 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+@theme inline{
+  /* ─── BRAND CORE ─────────────────────────────────────── */
+  --color-brand-coral: #E8453C;
+  --color-brand-orange: #F08C00;
+  --color-brand-yellow: #F5C542;
+  --color-brand-teal: #2BBCB3;
+
+  /* ─── BACKGROUNDS ────────────────────────────────────── */
+  --color-bg-dark: #1E2A3A;
+  --color-bg-deeper: #151F2B;
+  --color-bg-warm: #FFFAF5;
+  --color-bg-cream: #F5F0EB;
+
+  /* ─── TEXT ───────────────────────────────────────────── */
+  --color-text-primary: #1E2A3A;
+  --color-text-light: #FFFAF5;
+  --color-text-muted: #6B7B8D;
+  --color-text-accent: #E8453C;
+
+  /* ─── INTERACTIVE / SEMANTIC ────────────────────────── */
+  --color-cta-default: #E8453C;
+  --color-cta-hover: #D13B32;
+  --color-cta-active: #B83029;
+  
+  --color-secondary-default: #F08C00;
+  --color-secondary-hover: #DD7B00;
+  
+  --color-accent-default: #2BBCB3;
+  --color-accent-hover: #239A92;
+  --color-accent-ring: #2BBCB3;
+  
+  --color-highlight-default: #F5C542;
+  --color-highlight-text: #1E2A3A;
+
+  /* ─── BORDERS & DIVIDERS ────────────────────────────── */
+  --color-border-light: #E2DDD8;
+  --color-border-dark: #2E3E52;
+  --color-border-accent: #2BBCB3;
+
+  /* ─── FEEDBACK / STATUS ─────────────────────────────── */
+  --color-success: #2BBCB3;
+  --color-error: #E8453C;
+  --color-warning: #F5C542;
+
+  /* ─── TYPOGRAPHY ────────────────────────────────────── */
+  --font-family-display: 'Playfair Display', Georgia, serif;
+  --font-family-body: 'DM Sans', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', monospace;
+
+  /* ─── SHADOWS ───────────────────────────────────────── */
+  --shadow-card: 0 2px 12px rgba(30, 42, 58, 0.08);
+  --shadow-lifted: 0 8px 32px rgba(30, 42, 58, 0.14);
+  --shadow-glow: 0 0 24px rgba(43, 188, 179, 0.30);
+
+  --breakpoint-vsm: 550px;
+  --breakpoint-tny: 450px;
+  --breakpoint-xsm: 385px;
+}
+body {
+  background: var(--background);
+  color: var( --color-text-primary);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+.burger-icon {
+  width: 25px;
+  height: 14px; 
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: space-between;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+.burger-icon span {
+  display: block;
+  width: 100%;
+  height: 1.5px;   
+  background: var(--color-text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.burger-icon.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.burger-icon.active span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.burger-icon.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 197, 66, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(245, 197, 66, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 197, 66, 0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  background: #F5C542;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.carousel-card {
+  position: absolute; 
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Center - Active card */
+.carousel-card.center {
+  transform: translateY(-40%) scale(1.12) rotateX(0deg);
+  opacity: 1;
+  z-index: 3;
+}
+
+/* Top card */
+.carousel-card.right {
+  transform: translateY(-120%) translateX(42%) scale(0.34) rotateX(-15deg);  
+  opacity: 0;
+  z-index: 1;
+}
+
+/* Bottom card */
+.carousel-card.left {
+  transform: translateY(386%) translateX(55%)  scale(0.3) rotateX(10deg);
+  opacity: 0; 
+  z-index: 2;
+}
+
+/* Hidden (for 4+ card carousels) */
+.carousel-card.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.blob {
+  aspect-ratio: 1;
+  clip-path: shape(from 93.92% 65.24%,curve to 82.48% 83.23% with 89.00% 74.75%,curve to 65.41% 93.36% with 75.95% 91.72%,curve to 45.04% 93.32% with 54.87% 95.00%,curve to 25.21% 88.06% with 35.22% 91.64%,curve to 10.40% 74.90% with 15.20% 84.49%,curve to 3.65% 54.82% with 5.60% 65.31%,curve to 5.54% 34.28% with 1.69% 44.34%,curve to 17.94% 18.23% with 9.39% 24.23%,curve to 35.98% 10.08% with 26.50% 12.23%,curve to 55.93% 5.85% with 45.45% 7.93%,curve to 74.82% 10.42% with 66.41% 3.78%,curve to 88.07% 26.13% with 83.23% 17.07%,curve to 95.88% 45.46% with 92.92% 35.20%,curve to 93.92% 65.24% with 98.84% 55.72%);
+}
+
+
+/* Container */
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 3rem 0;
+}
+
+/* Fade edges */
+.marquee-container::before,
+.marquee-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee-container::before {
+  left: 0;
+  background: linear-gradient(to right, #FFFAF5, transparent);
+}
+
+.marquee-container::after {
+  right: 0;
+  background: linear-gradient(to left, #FFFAF5, transparent);
+}
+
+/* Track */
+.marquee-track {
+  display: flex;
+  gap: 1.5rem;
+  width: fit-content;
+  animation: scroll-left 40s linear infinite;
+}
+
+.marquee-track.paused,
+.marquee-track.reverse.paused {
+  animation-play-state: paused;
+}
+
+/* Reverse direction for second row */
+.marquee-track.reverse {
+  animation: scroll-right 40s linear infinite;
+}
+
+/* Animations */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* Moves exactly one full set */
+  }
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Category Card */
+.category-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  min-width: 200px;
+  flex-shrink: 0; /* Prevent cards from shrinking */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon container */
+.category-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+/* Category info */
+.category-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.category-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1E2A3A;
+  margin: 0;
+}
+
+.category-count {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  color: #6B7B8D;
+  margin: 0;
+}
+
+@media (max-width:660px) {
+  .marquee-container::before,
+  .marquee-container::after {
+    width: 40px;
+    z-index: 2;
+  }
 }
